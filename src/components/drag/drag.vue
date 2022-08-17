@@ -14,7 +14,6 @@ import Aside from "./aside.vue"
 import Canvas from "./canvas.vue"
 import { dragElements } from "./dragType";
 import Option from "./option.vue"
-import { copyObj } from "./dragService";
 import MoveElement from "./moveElement.vue";
 
 //当前是否可以拖动
@@ -52,7 +51,7 @@ const activeElement = ref<dragElements>({
 })
 const activeIndex = ref(-1)
 
-//当用户选中元素时触发
+//当用户选中侧边栏新增元素时触发
 function onChooseElement(ele: dragElements) {
     isDrag.value = true
     newElement.value = ele

@@ -26,10 +26,10 @@ const root = ref()
 const activeElement = ref<dragElements>({ type: "", text: "", style: { top: "0px", left: "0px", background: '#fff' } })
 const actveIndex = ref(-1)
 const isMove = ref(false)
-
+//修正鼠标位置不然每次点击都在左上角
 const fixX = ref(0)
 const fixY = ref(0)
-
+//获取元素边界
 onMounted(() => {
     emit("setEage",
         root.value.offsetTop,
@@ -38,7 +38,7 @@ onMounted(() => {
         root.value.offsetWidth + root.value.offsetLeft
     )
 })
-
+//开始移动
 function activeAct(el: dragElements, index: number, ev: MouseEvent) {
 
     console.log(props.canvasElements);
@@ -54,11 +54,12 @@ function activeAct(el: dragElements, index: number, ev: MouseEvent) {
 
 
 }
+//移动时修改位置
 function activeMove(ev: MouseEvent) {
     if (!isMove.value) {
         return
     }
-
+    //防止越过边界
     if (ev.x - fixX.value < root.value.offsetLeft ||
         ev.x - fixX.value + 200 > root.value.offsetWidth + root.value.offsetLeft ||
         ev.y - fixY.value < root.value.offsetTop ||
@@ -72,11 +73,12 @@ function activeMove(ev: MouseEvent) {
     activeElement.value.style.left = (ev.x - fixX.value).toString() + "px"
     activeElement.value.style.top = (ev.y - fixY.value).toString() + "px"
 }
+//停止移动
 function stopMove(ev: MouseEvent) {
 
     isMove.value = false
 }
-
+//修正位置函数
 function fix(num1: number, num2: number) {
     return num1 - num2
 }

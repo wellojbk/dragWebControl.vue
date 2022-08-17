@@ -33,6 +33,8 @@ const elementList: Array<dragElements> = [
 
 ]
 const elements: Ref<Array<dragElements>> = ref(elementList)
+
+//新增元素
 function mousedown(el: dragElements, ev: MouseEvent) {
 
     el.style.left = ev.x.toString() + "px"
