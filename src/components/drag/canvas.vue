@@ -1,11 +1,7 @@
 <template>
-    <div class="canvas" ref="root" @mouseup="stopMove">
-        <div v-for="(i, index) in canvasElements" 
-            :key="index" 
-            :class="index === actveIndex ? 'active' : ''"
-            :style="{ ...i.style }"
-            @mousemove.stop="activeMove" 
-            @mouseup="stopMove"
+    <div class="canvas" ref="root" @mouseup="stopMove" @click="unactive">
+        <div v-for="(i, index) in canvasElements" :key="index" :class="index === actveIndex ? 'active' : ''"
+            :style="{ ...i.style }" @mousemove.stop="activeMove" @mouseup="stopMove" @click.stop=""
             @mousedown.stop="e => { activeAct(i, index, e) }">{{ i.text }}</div>
     </div>
 </template>
@@ -41,29 +37,27 @@ onMounted(() => {
 //开始移动
 function activeAct(el: dragElements, index: number, ev: MouseEvent) {
 
-    console.log(props.canvasElements);
-
-
     isMove.value = true
     activeElement.value = el
     actveIndex.value = index
     emit("setActiveElement", el, index)
 
-    fixX.value = fix(ev.x, pxToNumber(el.style.left))
-    fixY.value = fix(ev.y, pxToNumber(el.style.top))
+    fixX.value = fix(ev.x, pxToNumber(el.style.left + root.value.offsetLeft))
+    fixY.value = fix(ev.y, pxToNumber(el.style.top + root.value.offsetTop))
 
 
 }
 //移动时修改位置
 function activeMove(ev: MouseEvent) {
+
     if (!isMove.value) {
         return
     }
     //防止越过边界
-    if (ev.x - fixX.value < root.value.offsetLeft ||
-        ev.x - fixX.value + 200 > root.value.offsetWidth + root.value.offsetLeft ||
-        ev.y - fixY.value < root.value.offsetTop ||
-        ev.y - fixY.value + 50 > root.value.offsetHeight + root.value.offsetTop
+    if (ev.x - fixX.value < 0 ||
+        ev.x - fixX.value + (activeElement.value.style?.width ? pxToNumber(activeElement.value.style.width) : 200) > root.value.offsetWidth ||
+        ev.y - fixY.value < 0 ||
+        ev.y - fixY.value + (activeElement.value.style?.height ? pxToNumber(activeElement.value.style.height) : 50) > root.value.offsetHeight
     ) {
         console.log("over eage");
 
@@ -74,21 +68,29 @@ function activeMove(ev: MouseEvent) {
     activeElement.value.style.top = (ev.y - fixY.value).toString() + "px"
 }
 //停止移动
-function stopMove(ev: MouseEvent) {
+function stopMove() {
 
     isMove.value = false
 }
 //修正位置函数
 function fix(num1: number, num2: number) {
+    console.log(num1, num2);
+
     return num1 - num2
+}
+
+function unactive() {
+    actveIndex.value = -1
+    activeElement.value = { type: "", text: "", style: { top: "0px", left: "0px", background: '#fff' } }
+    emit("setActiveElement", activeElement.value, actveIndex.value)
 }
 
 </script>
 <style lang="scss" scoped>
 .canvas {
+    position: relative;
     width: 1000px;
     height: 750px;
-    border-radius: 10px;
     border: 1px solid #000;
     overflow: hidden;
 
@@ -97,10 +99,12 @@ function fix(num1: number, num2: number) {
         width: 200px;
         height: 50px;
         border: 1px solid #ccc;
+        user-select: none;
+        overflow: hidden;
     }
 
     .active {
-        border: 3px solid sienna;
+        border: 1px dashed #000;
     }
 }
 </style>

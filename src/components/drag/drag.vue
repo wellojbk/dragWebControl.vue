@@ -78,7 +78,13 @@ function mouseUp(ev: MouseEvent) {
 
     //如果拖动元素在.canvas元素上
     if (ev.x < eage.value.leftMax && ev.x > eage.value.leftMin && ev.y < eage.value.topMax && ev.y > eage.value.topMin) {
-        canvasElements.value.push(JSON.parse(JSON.stringify(newElement.value)))
+        //深拷贝
+        let addtoElement = JSON.parse(JSON.stringify(newElement.value));
+
+        addtoElement.style.left = (ev.x - eage.value.leftMin).toString() + "px"
+        addtoElement.style.top = (ev.y - eage.value.topMin).toString() + "px"
+
+        canvasElements.value.push(addtoElement)
 
     }
 
