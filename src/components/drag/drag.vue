@@ -21,11 +21,9 @@ const isDrag: Ref<boolean> = ref<boolean>(false)
 //默认添加一个空元素
 const newElement: Ref<dragElements> = ref<dragElements>({
     type: "",
-    text: "",
     style: {
         top: "0px",
         left: "0px",
-        background: "#fff"
     }
 })
 
@@ -42,11 +40,9 @@ const eage = ref({
 //默认选中的元素
 const activeElement = ref<dragElements>({
     type: "",
-    text: "",
     style: {
         top: "0px",
         left: "0px",
-        background: "#fff"
     }
 })
 const activeIndex = ref(-1)

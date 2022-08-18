@@ -19,7 +19,7 @@ const emit = defineEmits<{
     (event: "setActiveElement", el: dragElements, index: number): void
 }>()
 const root = ref()
-const activeElement = ref<dragElements>({ type: "", text: "", style: { top: "0px", left: "0px", background: '#fff' } })
+const activeElement = ref<dragElements>({ type: "",  style: { top: "0px", left: "0px"} })
 const actveIndex = ref(-1)
 const isMove = ref(false)
 //修正鼠标位置不然每次点击都在左上角
@@ -81,7 +81,7 @@ function fix(num1: number, num2: number) {
 
 function unactive() {
     actveIndex.value = -1
-    activeElement.value = { type: "", text: "", style: { top: "0px", left: "0px", background: '#fff' } }
+    activeElement.value = { type: "",style: { top: "0px", left: "0px" } }
     emit("setActiveElement", activeElement.value, actveIndex.value)
 }
 
